@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Linq;
 using AspNetMvc5MyTemplate.Common;
 using Owin;
 using NWebsec.Owin;
@@ -25,11 +26,21 @@ namespace AspNetMvc5MyTemplate
                 .Deny());
 
             string[] allowedRedirectDestinations =
-                ConfigurationManager.AppSettings[Consts.WebConfigKey.AllowedRedirectDestinations].Split('|');
+                ConfigurationManager.AppSettings[Consts.WebConfigKey.AllowedRedirectDestinations]
+                .Split('|')
+                .Where(ard => !string.IsNullOrWhiteSpace(ard)).ToArray();
 
-            app.UseRedirectValidation(options => options
-                .AllowedDestinations(allowedRedirectDestinations)
-                .AllowSameHostRedirectsToHttps());
+            if (allowedRedirectDestinations.Length > 0)
+            {
+                app.UseRedirectValidation(options => options
+                    .AllowedDestinations(allowedRedirectDestinations)
+                    .AllowSameHostRedirectsToHttps());
+            }
+            else
+            {
+                app.UseRedirectValidation(options => options
+                    .AllowSameHostRedirectsToHttps());
+            }
 
             app.UseXXssProtection(options => options
                 .EnabledWithBlockMode());

@@ -34,7 +34,7 @@ namespace AspNetMvc5MyTemplate
             Server.ClearError();
 
             //Redirect Error page
-            Response.Redirect("Error/ServerError");
+            Response.Redirect("~/Error/ServerError");
         }
     }
 }

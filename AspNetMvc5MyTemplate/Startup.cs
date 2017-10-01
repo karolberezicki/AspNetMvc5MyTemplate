@@ -9,6 +9,7 @@ namespace AspNetMvc5MyTemplate
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            ConfigureSec(app);
         }
     }
 }
